@@ -1,0 +1,56 @@
+<% content_for :page_title, @post.title %>
+<section class="section">
+	<div class="container">
+		<nav class="level">
+		  <!-- Left side -->
+		  <div class="level-left">
+		    <p class="level-item">
+		        <strong>Actions</strong>
+		    </p>
+		  </div>
+		  <!-- Right side -->
+		  <div class="level-right">
+		    <% if has_role?(:admin) %>
+        <div class="column has-text-right">
+         <p class="level-item">
+		    	<%= link_to "Edit", edit_post_path(@post), class:"button" %>
+		  	</p>
+        </div>
+        <% end %>
+		  	
+		  	<p class="level-item">
+				<%= link_to "Delete", post_path(@post), data: { "turbo-method": :delete }, class:"button is-danger" %>
+				</p>
+				<% if current_user.likes.find_by(post: @post).nil? %>
+				<form action="/likes" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="hidden" name="like[post_id]" value="<%= post_url %>">
+<input class="button" , type="submit" value="like" value="like" >
+</form>
+<% else %>
+unlike
+<% end %>
+		  </div>
+		</nav>
+		<hr/>
+
+
+
+
+		<div class="content">
+			<%= @post.content %>
+		</div>
+	</div>
+          </section>
+		  <section class="section comments">
+	<div class="container">
+		<h2 class="subtitle is-5"><strong><%= @post.comments.count %></strong> Comments</h2>
+		<%= render @post.comments %>
+		<div class="comment-form">
+			<hr />
+			<h3 class="subtitle is-3">Leave a reply</h3>
+	 		<%= render 'comments/form' %>
+		</div>
+		
+	</div>
+</section>
